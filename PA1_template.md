@@ -33,20 +33,14 @@ activity_df <- read.csv("activity.csv",
 Here the ddply function from the plyr package is used. However, since some dates
 have a value of NA, these values will replaced with zero if we attempt to remove
 the NAs in the summarize function. This will skew the mean number of steps per
-day. The key assumption here is NA represents some kind of an error in measurement
+day. So na.rm is set to FALSE when utilizing the summarize function.
+The key assumption here is NA represents some kind of an error in measurement
 and is not the same as a zero. A zero number of steps may mean that the person
 was asleep or not walking.
 
 
 ```r
 require(plyr)
-```
-
-```
-## Loading required package: plyr
-```
-
-```r
 options(scipen=4)
 
 totalStepsByDate <- ddply(activity_df, .(date), summarize, totalSteps=sum(steps, na.rm=FALSE))
@@ -73,14 +67,6 @@ text(x=medianTotalStepsPerDay, y=25,labels=paste("Median = ",round(medianTotalSt
 The mean total number of steps taken per day is **10766**  
 
 The median total number of steps taken per day is  **10765**
-
-## Loading and preprocessing the data
-
-
-
-## What is mean total number of steps taken per day?
-
-
 
 ## What is the average daily activity pattern?
 
@@ -133,32 +119,7 @@ days is calculated in the "Plotting the average daily activity" section
 
 ```r
 require(dplyr)
-```
 
-```
-## Loading required package: dplyr
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:plyr':
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
-# Creating a new dataframe with intervals,average steps during that interval 
-# for easier manipulation with dplyr package 
-
-#averageTimeInterval_df <- as.data.frame(averageStepsByTimeInterval)
 
 # Adding a new column to the data set that has the imputed
 new_activity_df <- mutate(activity_df, 
@@ -209,6 +170,7 @@ The median total number of steps taken per day
 * After imputing strategy is applied is **10766**  
 
 ### Differences in activity patterns between weekdays and weekends  
+
 
 ```r
 # categorize the activity data into weekday or weekend

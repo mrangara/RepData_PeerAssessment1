@@ -232,17 +232,13 @@ activity_df &lt;- read.csv(&quot;activity.csv&quot;,
 <p>Here the ddply function from the plyr package is used. However, since some dates
 have a value of NA, these values will replaced with zero if we attempt to remove
 the NAs in the summarize function. This will skew the mean number of steps per
-day. The key assumption here is NA represents some kind of an error in measurement
+day. So na.rm is set to FALSE when utilizing the summarize function.
+The key assumption here is NA represents some kind of an error in measurement
 and is not the same as a zero. A zero number of steps may mean that the person
 was asleep or not walking.</p>
 
 <pre><code class="r">require(plyr)
-</code></pre>
-
-<pre><code>## Loading required package: plyr
-</code></pre>
-
-<pre><code class="r">options(scipen=4)
+options(scipen=4)
 
 totalStepsByDate &lt;- ddply(activity_df, .(date), summarize, totalSteps=sum(steps, na.rm=FALSE))
 
@@ -268,10 +264,6 @@ text(x=medianTotalStepsPerDay, y=25,labels=paste(&quot;Median = &quot;,round(med
 <p>The mean total number of steps taken per day is <strong>10766</strong>  </p>
 
 <p>The median total number of steps taken per day is  <strong>10765</strong></p>
-
-<h2>Loading and preprocessing the data</h2>
-
-<h2>What is mean total number of steps taken per day?</h2>
 
 <h2>What is the average daily activity pattern?</h2>
 
@@ -321,30 +313,7 @@ days is calculated in the &ldquo;Plotting the average daily activity&rdquo; sect
 <h3>Creating the new data set with imputed values for steps</h3>
 
 <pre><code class="r">require(dplyr)
-</code></pre>
 
-<pre><code>## Loading required package: dplyr
-## 
-## Attaching package: &#39;dplyr&#39;
-## 
-## The following objects are masked from &#39;package:plyr&#39;:
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize
-## 
-## The following object is masked from &#39;package:stats&#39;:
-## 
-##     filter
-## 
-## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union
-</code></pre>
-
-<pre><code class="r"># Creating a new dataframe with intervals,average steps during that interval 
-# for easier manipulation with dplyr package 
-
-#averageTimeInterval_df &lt;- as.data.frame(averageStepsByTimeInterval)
 
 # Adding a new column to the data set that has the imputed
 new_activity_df &lt;- mutate(activity_df, 
