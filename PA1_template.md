@@ -18,7 +18,8 @@ the assignment are
 4. Depict differences in activity patterns between weekdays and weekends
 
 ### Loading Activity.csv file
-```{r, echo=TRUE}
+
+```r
 # Load the activity.csv file. 
 # Key Assumption: activity.csv file is in the current directory
 
@@ -36,9 +37,16 @@ day. The key assumption here is NA represents some kind of an error in measureme
 and is not the same as a zero. A zero number of steps may mean that the person
 was asleep or not walking.
 
-```{r, echo=TRUE}
 
+```r
 require(plyr)
+```
+
+```
+## Loading required package: plyr
+```
+
+```r
 options(scipen=4)
 
 totalStepsByDate <- ddply(activity_df, .(date), summarize, totalSteps=sum(steps, na.rm=FALSE))
@@ -58,12 +66,13 @@ abline (v = medianTotalStepsPerDay, col="magenta")
 
 text(x=meanTotalStepsPerDay, y=20,labels=paste("Mean = ",round(meanTotalStepsPerDay,0)), pos=2,col='blue')
 text(x=medianTotalStepsPerDay, y=25,labels=paste("Median = ",round(medianTotalStepsPerDay,0)), pos=4,col='magenta')
-
 ```
 
-The mean total number of steps taken per day is **`r meanTotalStepsPerDay`**  
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
-The median total number of steps taken per day is  **`r medianTotalStepsPerDay`**
+The mean total number of steps taken per day is **10766**  
+
+The median total number of steps taken per day is  **10765**
 
 ## Loading and preprocessing the data
 
@@ -74,7 +83,8 @@ The median total number of steps taken per day is  **`r medianTotalStepsPerDay`*
 
 
 ## What is the average daily activity pattern?
-```{r, echo=TRUE}
+
+```r
 options(scipen=4)
 averageStepsByTimeInterval <- ddply(activity_df, .(interval), summarize, averageSteps=mean(steps, na.rm=TRUE))
 
@@ -99,15 +109,16 @@ abline(v=timeIntervalIndex, lty="dashed", col="red")
 axis(3,at=timeIntervalIndex,labels=timeIntervals[timeIntervalIndex],col="red", col.lab="red",las=1)
 mtext("(Interval with Maximum average number of Steps)", side=3,at=timeIntervalIndex)
 title("Average Daily Activity Pattern", line=2.5)
-
 ```
+
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
   
   
-The time interval of the day that has the maximum average number of steps is  **`r timeIntervals[timeIntervalIndex]`**  
+The time interval of the day that has the maximum average number of steps is  **835**  
   
 ## Imputing missing values  
   
-A number of rows have missing values in the data set. A total of **`r sum(is.na(activity_df))`** rows are missing.  
+A number of rows have missing values in the data set. A total of **2304** rows are missing.  
 
 ### Strategy for imputing  
 
@@ -119,10 +130,31 @@ for that interval. The average number of steps for an interval across all
 days is calculated in the "Plotting the average daily activity" section  
 
 ### Creating the new data set with imputed values for steps
-```{r,echo=TRUE}
 
+```r
 require(dplyr)
+```
 
+```
+## Loading required package: dplyr
+## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:plyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 # Creating a new dataframe with intervals,average steps during that interval 
 # for easier manipulation with dplyr package 
 
@@ -136,7 +168,8 @@ new_activity_df <- mutate(activity_df,
 ```
 
 ### Creating a histogram with the imputed values for steps  
-```{r, echo=TRUE}
+
+```r
 options(scipen=4)
 
 totalImputedStepsByDate <- ddply(new_activity_df, .(date), summarize, totalImputedSteps=sum(imputedSteps, na.rm=TRUE))
@@ -157,6 +190,8 @@ text(x=meanTotalImputedSteps, y=20,labels=paste("Mean = ",round(meanTotalImputed
 text(x=medianTotalImputedSteps, y=25,labels=paste("Median = ",round(medianTotalImputedSteps,0)), pos=4,col='magenta')
 ```
 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+
 Applying the chosen imputing strategy, with imputed data, the observations are 
 more closer to the values when missing values were not considered. Based on this
 observation, we can infer that the imputing strategy is a reasonable approach 
@@ -165,16 +200,17 @@ of the observation period.
 
 The mean total number of steps taken per day  
 
-* Before imputing strategy is applied is **`r meanTotalStepsPerDay`**  
-* After imputing strategy is applied is **`r meanTotalImputedSteps`**  
+* Before imputing strategy is applied is **10766**  
+* After imputing strategy is applied is **10766**  
   
 The median total number of steps taken per day 
 
-* Before imputing strategy is applied is **`r medianTotalStepsPerDay`**
-* After imputing strategy is applied is **`r medianTotalImputedSteps`**  
+* Before imputing strategy is applied is **10765**
+* After imputing strategy is applied is **10766**  
 
 ### Differences in activity patterns between weekdays and weekends  
-```{r, echo=TRUE}
+
+```r
 # categorize the activity data into weekday or weekend
 new_activity_df <- mutate(new_activity_df, 
                           day=ifelse(as.POSIXlt(date,format="%Y-%m-%d")$wday %in% c(0,6),
@@ -203,4 +239,6 @@ xyplot(mean ~ interval|day,
        layout=c(1,2)
        )
 ```
+
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
 
