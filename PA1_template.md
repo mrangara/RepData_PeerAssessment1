@@ -170,7 +170,7 @@ The median total number of steps taken per day
 * After imputing strategy is applied is **10766**  
 
 ### Differences in activity patterns between weekdays and weekends  
-
+  
 
 ```r
 # categorize the activity data into weekday or weekend

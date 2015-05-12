@@ -163,7 +163,7 @@ The median total number of steps taken per day
 * After imputing strategy is applied is **`r medianTotalImputedSteps`**  
 
 ### Differences in activity patterns between weekdays and weekends  
-
+  
 ```{r, echo=TRUE}
 # categorize the activity data into weekday or weekend
 new_activity_df <- mutate(new_activity_df, 
